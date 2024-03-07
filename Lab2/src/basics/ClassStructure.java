@@ -49,6 +49,7 @@ public class ClassStructure {
         //nonStaticMethod(); // DOES NOT COMPILE: Non-static method 'nonStaticMethod()' cannot be referenced from a static context
         System.out.println("Executed main method");
         System.out.println("counter = " + counter);
+        ClassStructure a = new ClassStructure();
     }
 
     public int getA() {
@@ -61,12 +62,12 @@ public class ClassStructure {
 
 
     /** A .java file can have multi class definitions in it. However, only one can be public. */
-    class NonPublicClass {
-
-        /** class field */
-        private int a;
-
-        /** class method */
-        public void somethingElse() { }
-    }
+//    class NonPublicClass {
+//
+//        /** class field */
+//        private int a;
+//
+//        /** class method */
+//        public void somethingElse() { }
+//    }
 }
