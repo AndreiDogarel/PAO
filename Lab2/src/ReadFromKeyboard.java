@@ -22,6 +22,9 @@ public class ReadFromKeyboard {
                 case "delete":
                     deleteUser();
                     break;
+                case "show":
+                    showAllUsers();
+                    break;
                 case "help":
                     help();
                     break;
@@ -74,6 +77,10 @@ public class ReadFromKeyboard {
         } else {
             System.out.println("User not found.");
         }
+    }
+
+    private void showAllUsers() {
+        dataStorage.showAllUsers();
     }
 
     private void help() {

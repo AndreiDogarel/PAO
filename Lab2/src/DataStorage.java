@@ -24,4 +24,10 @@ public class DataStorage {
     public boolean deleteUser(String username) {
         return users.remove(username) != null;
     }
+
+    public void showAllUsers() {
+        for(var user : users.entrySet()) {
+            System.out.println("User: " + user.getValue().getUsername() + ", Sold: " + user.getValue().getSold());
+        }
+    }
 }
