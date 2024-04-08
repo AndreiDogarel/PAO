@@ -156,6 +156,96 @@ public abstract class User implements GenericClass<User> {
 
     @Override
     public void update() {
+        Scanner s = new Scanner(System.in);
 
+        while(true) {
+            System.out.println("""
+                    What do you want to change?
+                    1. Username
+                    2. Email
+                    3. Password
+                    4. Full name
+                    5. Education
+                    6. Experience
+                    7. Certifications
+                    8. Back
+                    """);
+
+            int response = s.nextInt();
+            if(response == 8) {
+                break;
+            }
+            switch (response) {
+                case 1: {
+                    setUsername(s.nextLine());
+                    break;
+                }
+                case 2: {
+                    setEmail(s.nextLine());
+                    break;
+                }
+                case 3: {
+                    String newPassword = s.nextLine();
+                    String newPasswordConfirmation = s.nextLine();
+                    if(newPasswordConfirmation.equals(newPassword)) {
+                        setPassword(newPassword);
+                    }
+                    break;
+                }
+                case 4: {
+                    setFullName(s.nextLine());
+                    break;
+                }
+                case 5: {
+                    System.out.println("""
+                            Select which operation you want:
+                            1. Add education
+                            2. Delete education
+                            3. Update education
+                            4. Back
+                            """);
+                    int index = s.nextInt();
+                    if(index == 4) {
+                        break;
+                    }
+                    switch (index) {
+                        case 1: {
+                            Education e = new Education();
+                            e.read();
+                            this.education.add(e);
+                            break;
+                        }
+                        case 2: {
+                            for(int i = 0; i < this.education.size(); ++i) {
+                                System.out.println((i + 1) + this.education.get(i).toString());
+                            }
+                            System.out.println("Select which education you want to delete: ");
+                            index = s.nextInt();
+                            try {
+                                this.education.remove(index);
+                            }
+                            catch(IndexOutOfBoundsException exception) {
+                                System.out.println(exception.getMessage());
+                            }
+                            break;
+                        }
+                        case 3: {
+                            for(int i = 0; i < this.education.size(); ++i) {
+                                System.out.println((i + 1) + this.education.get(i).toString());
+                            }
+                            System.out.println("Select which education you want to update: ");
+                            index = s.nextInt();
+                            try {
+                                this.education.get(index).update();
+                            }
+                            catch(IndexOutOfBoundsException exception) {
+                                System.out.println(exception.getMessage());
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 }
