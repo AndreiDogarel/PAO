@@ -6,25 +6,36 @@ import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Education implements GenericClass<Education> {
+    private int id;
     private String schoolName;
     private String degree;
     private String fieldOfStudy;
     private LocalDate startDate;
     private LocalDate endDate;
     private String grade;
+    private int userId;
 
     public Education() {
 
     }
 
-    public Education(String schoolName, String degree, String fieldOfStudy,
-                     LocalDate startDate, LocalDate endDate, String grade) {
+    public Education(int id, String schoolName, String degree, String fieldOfStudy, LocalDate startDate, LocalDate endDate, String grade, int userId) {
+        this.id = id;
         this.schoolName = schoolName;
         this.degree = degree;
         this.fieldOfStudy = fieldOfStudy;
         this.startDate = startDate;
         this.endDate = endDate;
         this.grade = grade;
+        this.userId = userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getSchoolName() {
@@ -73,6 +84,14 @@ public class Education implements GenericClass<Education> {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -129,33 +148,40 @@ public class Education implements GenericClass<Education> {
                     """);
 
             int response = s.nextInt();
+            s.nextLine();
             if(response == 7) {
                 break;
             }
             switch (response) {
                 case 1: {
+                    System.out.println("Please enter the new school name: ");
                     setSchoolName(s.nextLine());
                     break;
                 }
                 case 2: {
+                    System.out.println("Please enter the new degree: ");
                     setDegree(s.nextLine());
                     break;
                 }
                 case 3: {
+                    System.out.println("Please enter the new field of study name: ");
                     setFieldOfStudy(s.nextLine());
                     break;
                 }
                 case 4: {
+                    System.out.println("Please enter the new start date: ");
                     LocalDate date = LocalDate.parse(s.nextLine());
                     setStartDate(date);
                     break;
                 }
                 case 5: {
+                    System.out.println("Please enter the new end date: ");
                     LocalDate date = LocalDate.parse(s.nextLine());
                     setEndDate(date);
                     break;
                 }
                 case 6: {
+                    System.out.println("Please enter the new grade: ");
                     setGrade(s.nextLine());
                     break;
                 }

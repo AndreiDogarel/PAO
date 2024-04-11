@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class Experience implements GenericClass<Experience> {
+    private int id;
     private String jobRole;
     private String companyName;
     private LocalDate startDate;
@@ -15,14 +16,14 @@ public class Experience implements GenericClass<Experience> {
     private String location;
     private String locationType;
     private boolean currentlyWorking;
+    private int userId;
 
     public Experience() {
 
     }
 
-    public Experience(String jobRole, String companyName, LocalDate startDate, LocalDate endDate,
-                      String employmentType, String location, String locationType,
-                      boolean currentlyWorking) {
+    public Experience(int id, String jobRole, String companyName, LocalDate startDate, LocalDate endDate, String employmentType, String location, String locationType, boolean currentlyWorking, int userId) {
+        this.id = id;
         this.jobRole = jobRole;
         this.companyName = companyName;
         this.startDate = startDate;
@@ -31,6 +32,15 @@ public class Experience implements GenericClass<Experience> {
         this.location = location;
         this.locationType = locationType;
         this.currentlyWorking = currentlyWorking;
+        this.userId = userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getJobRole() {
@@ -97,6 +107,14 @@ public class Experience implements GenericClass<Experience> {
         this.currentlyWorking = currentlyWorking;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Experience{" +
@@ -161,37 +179,45 @@ public class Experience implements GenericClass<Experience> {
                     """);
 
             int response = s.nextInt();
+            s.nextLine();
             if(response == 8) {
                 break;
             }
             switch (response) {
                 case 1: {
+                    System.out.println("Please enter the new job role: ");
                     setJobRole(s.nextLine());
                     break;
                 }
                 case 2: {
+                    System.out.println("Please enter the new company name: ");
                     setCompanyName(s.nextLine());
                     break;
                 }
                 case 3: {
+                    System.out.println("Please enter the new start date: ");
                     LocalDate date = LocalDate.parse(s.nextLine());
                     setStartDate(date);
                     break;
                 }
                 case 4: {
+                    System.out.println("Please enter the new end date: ");
                     LocalDate date = LocalDate.parse(s.nextLine());
                     setEndDate(date);
                     break;
                 }
                 case 5: {
+                    System.out.println("Please enter the new employment type: ");
                     setEmploymentType(s.nextLine());
                     break;
                 }
                 case 6: {
+                    System.out.println("Please enter the new location: ");
                     setLocation(s.nextLine());
                     break;
                 }
                 case 7: {
+                    System.out.println("Please enter the new location type: ");
                     setLocationType(s.nextLine());
                     break;
                 }
