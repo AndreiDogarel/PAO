@@ -3,6 +3,7 @@ package view;
 import database.DatabaseConnection;
 import model.*;
 import persistence.*;
+import service.*;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public class ConsoleApp {
     private ExperienceRepository _experienceRepository;
     private CertificationRepository _certificationRepository;
     private PostRepository _postRepository;
+    private UserService _userService;
+    private EducationService _educationService;
+    private ExperienceService _experienceService;
+    private CertificationService _certificationService;
+    private PostService _postService;
     private TreeSet<Post> feed;
 
     private ConsoleApp() {
@@ -28,6 +34,11 @@ public class ConsoleApp {
         _educationRepository = new EducationRepository(db);
         _experienceRepository = new ExperienceRepository(db);
         _postRepository = new PostRepository(db);
+        _educationService = new EducationService();
+        _experienceService = new ExperienceService();
+        _certificationService = new CertificationService();
+        _userService = new UserService(_experienceService, _educationService, _certificationService);
+        _postService = new PostService();
         this.feed = new TreeSet<>();
     }
 
@@ -81,7 +92,7 @@ public class ConsoleApp {
                     break;
                 }
             }
-            user.read();
+            user = _userService.read();
             _userRepository.add(user);
             System.out.println("User registered successfully!");
             postAuthMenu();
@@ -128,14 +139,13 @@ public class ConsoleApp {
                     break;
                 }
                 case 2: {
-                    user.update();
+                    _userService.update(user);
                     _userRepository.update(user);
                     System.out.println("User updated successfully!");
                     break;
                 }
                 case 3: {
-                    Post post = new Post();
-                    post.read();
+                    Post post = _postService.read();
                     post.setNameOfUser(user.getUsername());
                     feed.add(post);
                     _postRepository.add(post);
@@ -143,7 +153,7 @@ public class ConsoleApp {
                     break;
                 }
                 case 4: {
-                    String username = this.user.getUsername();
+                    String username = user.getUsername();
                     ArrayList<Post> userPosts = _postRepository.getAllForUser(username);
                     if(userPosts.isEmpty()) {
                         System.out.println("This user hasn't posted anything!");
@@ -155,7 +165,7 @@ public class ConsoleApp {
                         response = s.nextInt();
                         Post updatePost = _postRepository.get(response);
                         if(updatePost != null) {
-                            updatePost.update();
+                            _postService.update(updatePost);
                             _postRepository.update(updatePost);
                             System.out.println("Post updated successfully!");
                         }
@@ -163,7 +173,7 @@ public class ConsoleApp {
                     break;
                 }
                 case 5: {
-                    String username = this.user.getUsername();
+                    String username = user.getUsername();
                     ArrayList<Post> userPosts = _postRepository.getAllForUser(username);
                     if(userPosts.isEmpty()) {
                         System.out.println("This user hasn't posted anything!");

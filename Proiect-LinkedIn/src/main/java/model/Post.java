@@ -5,7 +5,7 @@ import interfaces.GenericClass;
 import java.util.Comparator;
 import java.util.Scanner;
 
-public class Post implements GenericClass<Post>, Comparable<Post> {
+public class Post implements Comparable<Post> {
     private int id;
     private String title;
     private String subject;
@@ -63,55 +63,6 @@ public class Post implements GenericClass<Post>, Comparable<Post> {
                 ", nameOfUser='" + nameOfUser + '\'' +
                 '}';
     }
-
-
-
-    @Override
-    public void read() {
-        Scanner s = new Scanner(System.in);
-
-        System.out.println("Post title: ");
-        setTitle(s.nextLine());
-
-        System.out.println("Subject: ");
-        setSubject(s.nextLine());
-    }
-
-    @Override
-    public void update() {
-        Scanner s = new Scanner(System.in);
-
-        while(true) {
-            System.out.println("""
-                    What do you want to change?
-                    1. Post title
-                    2. Post subject
-                    3. Back
-                    """);
-            int response = s.nextInt();
-            s.nextLine();
-            if(response == 3) {
-                break;
-            }
-            switch (response) {
-                case 1: {
-                    System.out.println("Please enter the new title: ");
-                    setTitle(s.nextLine());
-                    break;
-                }
-                case 2: {
-                    System.out.println("Please enter the new subject: ");
-                    setSubject(s.nextLine());
-                    break;
-                }
-                default: {
-                    System.out.println("Unknown command");
-                    break;
-                }
-            }
-        }
-    }
-
     @Override
     public int compareTo(Post other) {
         return Integer.compare(this.id, other.id);
