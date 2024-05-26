@@ -3,6 +3,7 @@ package persistence;
 import database.DatabaseConnection;
 import model.Certification;
 import model.Experience;
+import service.AuditService;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -25,6 +26,7 @@ public class CertificationRepository {
             statement.setDate(4, Date.valueOf(certification.getEndDate()));
             statement.setInt(5, certification.getUserId());
             statement.executeUpdate();
+            AuditService.logAction("ADD_CERTIFICATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,6 +37,7 @@ public class CertificationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_CERTIFICATION");
             if (resultSet.next()) {
                 return new Certification(
                         resultSet.getInt("id"),
@@ -57,6 +60,7 @@ public class CertificationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_CERTIFICATIONS_FOR_USER");
             while (resultSet.next()) {
                 certifications.add(new Certification(
                         resultSet.getInt("id"),
@@ -82,6 +86,7 @@ public class CertificationRepository {
             statement.setDate(4, Date.valueOf(certification.getEndDate()));
             statement.setInt(5, certification.getId());
             statement.executeUpdate();
+            AuditService.logAction("UPDATE_CERTIFICATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -94,6 +99,7 @@ public class CertificationRepository {
             add(certification);
         }
     }
+
     private boolean exists(int id) {
         String sql = "SELECT id FROM certifications WHERE id = ?";
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
@@ -111,6 +117,7 @@ public class CertificationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, certification.getId());
             statement.executeUpdate();
+            AuditService.logAction("DELETE_CERTIFICATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }

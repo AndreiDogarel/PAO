@@ -3,6 +3,7 @@ package persistence;
 import database.DatabaseConnection;
 import model.Education;
 import model.Experience;
+import service.AuditService;
 
 import javax.xml.crypto.Data;
 import java.sql.*;
@@ -30,6 +31,7 @@ public class ExperienceRepository {
             statement.setBoolean(8, experience.isCurrentlyWorking());
             statement.setInt(9, experience.getUserId());
             statement.executeUpdate();
+            AuditService.logAction("ADD_EXPERIENCE");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,6 +42,7 @@ public class ExperienceRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_EXPERIENCE");
             if (resultSet.next()) {
                 return new Experience(
                         resultSet.getInt("id"),
@@ -66,6 +69,7 @@ public class ExperienceRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_EXPERIENCES_FOR_USER");
             while (resultSet.next()) {
                 experiences.add(new Experience(
                         resultSet.getInt("id"),
@@ -99,6 +103,7 @@ public class ExperienceRepository {
             statement.setBoolean(8, experience.isCurrentlyWorking());
             statement.setInt(9, experience.getId());
             statement.executeUpdate();
+            AuditService.logAction("UPDATE_EXPERIENCE");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -128,6 +133,7 @@ public class ExperienceRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, experience.getId());
             statement.executeUpdate();
+            AuditService.logAction("DELETE_EXPERIENCE");
         } catch (SQLException e) {
             e.printStackTrace();
         }

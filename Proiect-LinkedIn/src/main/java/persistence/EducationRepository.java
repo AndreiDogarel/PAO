@@ -2,6 +2,7 @@ package persistence;
 
 import database.DatabaseConnection;
 import model.Education;
+import service.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class EducationRepository {
             statement.setString(6, education.getGrade());
             statement.setInt(7, education.getUserId()); // Presupunem că există un getter pentru userId în Education
             statement.executeUpdate();
+            AuditService.logAction("ADD_EDUCATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -36,6 +38,7 @@ public class EducationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_EDUCATION");
             if (resultSet.next()) {
                 return new Education(
                         resultSet.getInt("id"),
@@ -60,6 +63,7 @@ public class EducationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, userId);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_EDUCATION_FOR_USER");
             while (resultSet.next()) {
                 Education education = new Education(
                         resultSet.getInt("id"),
@@ -91,6 +95,7 @@ public class EducationRepository {
             statement.setInt(7, education.getUserId());
             statement.setInt(8, education.getId());
             statement.executeUpdate();
+            AuditService.logAction("UPDATE_EDUCATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -120,6 +125,7 @@ public class EducationRepository {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, education.getId());
             statement.executeUpdate();
+            AuditService.logAction("DELETE_EDUCATION");
         } catch (SQLException e) {
             e.printStackTrace();
         }

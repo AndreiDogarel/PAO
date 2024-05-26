@@ -2,6 +2,7 @@ package persistence;
 
 import database.DatabaseConnection;
 import model.*;
+import service.AuditService;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,15 +41,7 @@ public class UserRepository implements GenericRepository<User> {
 
             statement.setString(5, userType);
             statement.executeUpdate();
-            for (Education e : user.getEducation()) {
-                _educationRepository.add(e);
-            }
-            for (Experience e : user.getExperience()) {
-                _experienceRepository.add(e);
-            }
-            for (Certification c : user.getCertifications()) {
-                _certificationRepository.add(c);
-            }
+            AuditService.logAction("ADD_USER");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -59,6 +52,7 @@ public class UserRepository implements GenericRepository<User> {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_USER");
             if (resultSet.next()) {
                 return new User(
                         resultSet.getInt("id"),
@@ -80,6 +74,7 @@ public class UserRepository implements GenericRepository<User> {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_USER");
             if (resultSet.next()) {
                 return new User(
                         resultSet.getInt("id"),
@@ -101,6 +96,7 @@ public class UserRepository implements GenericRepository<User> {
         String sql = "SELECT * FROM users";
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             ResultSet resultSet = statement.executeQuery();
+            AuditService.logAction("READ_USERS");
             while (resultSet.next()) {
                 users.add(new User(
                         resultSet.getInt("id"),
@@ -126,15 +122,7 @@ public class UserRepository implements GenericRepository<User> {
             statement.setString(4, user.getFullName());
             statement.setInt(5, user.getId());
             statement.executeUpdate();
-            for (Education e : user.getEducation()) {
-                _educationRepository.upsert(e);
-            }
-            for (Experience e : user.getExperience()) {
-                _experienceRepository.upsert(e);
-            }
-            for (Certification c : user.getCertifications()) {
-                _certificationRepository.upsert(c);
-            }
+            AuditService.logAction("UPDATE_USER");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -146,15 +134,7 @@ public class UserRepository implements GenericRepository<User> {
         try (PreparedStatement statement = db.connection.prepareStatement(sql)) {
             statement.setInt(1, user.getId());
             statement.executeUpdate();
-            for (Education e : user.getEducation()) {
-                _educationRepository.delete(e);
-            }
-            for (Experience e : user.getExperience()) {
-                _experienceRepository.delete(e);
-            }
-            for (Certification c : user.getCertifications()) {
-                _certificationRepository.delete(c);
-            }
+            AuditService.logAction("DELETE_USER");
         } catch (SQLException e) {
             e.printStackTrace();
         }

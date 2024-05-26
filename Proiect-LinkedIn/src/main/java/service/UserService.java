@@ -5,6 +5,9 @@ import model.Certification;
 import model.Education;
 import model.Experience;
 import model.User;
+import persistence.CertificationRepository;
+import persistence.EducationRepository;
+import persistence.ExperienceRepository;
 
 import java.util.Scanner;
 
@@ -12,11 +15,18 @@ public class UserService implements GenericService<User> {
     private ExperienceService _experienceService;
     private EducationService _educationService;
     private CertificationService _certificationService;
+    private ExperienceRepository _experienceRepository;
+    private EducationRepository _educationRepository;
+    private CertificationRepository _certificationRepository;
     public UserService(ExperienceService experienceService, EducationService educationService,
-                       CertificationService certificationService) {
+                       CertificationService certificationService, ExperienceRepository experienceRepository,
+                       EducationRepository educationRepository, CertificationRepository certificationRepository) {
         _experienceService = experienceService;
         _educationService = educationService;
         _certificationService = certificationService;
+        _experienceRepository = experienceRepository;
+        _educationRepository = educationRepository;
+        _certificationRepository = certificationRepository;
     }
 
     @Override
@@ -48,6 +58,7 @@ public class UserService implements GenericService<User> {
             Education education = _educationService.read();
             education.setUserId(user.getId());
             user.getEducation().add(education);
+            _educationRepository.add(education);
         }
 
         System.out.println("Add experience? (yes/no): ");
@@ -56,6 +67,7 @@ public class UserService implements GenericService<User> {
             Experience experience = _experienceService.read();
             experience.setUserId(user.getId());
             user.getExperience().add(experience);
+            _experienceRepository.add(experience);
         }
 
         System.out.println("Add certification? (yes/no): ");
@@ -64,6 +76,7 @@ public class UserService implements GenericService<User> {
             Certification certification = _certificationService.read();
             certification.setUserId(user.getId());
             user.getCertifications().add(certification);
+            _certificationRepository.add(certification);
         }
 
         return user;
@@ -137,6 +150,7 @@ public class UserService implements GenericService<User> {
                             Education e = _educationService.read();
                             e.setUserId(user.getId());
                             user.getEducation().add(e);
+                            _educationRepository.add(e);
                             break;
                         }
                         case 2: {
@@ -147,6 +161,7 @@ public class UserService implements GenericService<User> {
                                 System.out.println("Select which education you want to delete: ");
                                 index = s.nextInt();
                                 try {
+                                    _educationRepository.delete(user.getEducation().get(index - 1));
                                     user.getEducation().remove(index - 1);
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
@@ -166,6 +181,7 @@ public class UserService implements GenericService<User> {
                                 index = s.nextInt();
                                 try {
                                     _educationService.update(user.getEducation().get(index - 1));
+                                    _educationRepository.update(user.getEducation().get(index - 1));
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
                                 }
@@ -195,6 +211,7 @@ public class UserService implements GenericService<User> {
                             Experience e = _experienceService.read();
                             e.setUserId(user.getId());
                             user.getExperience().add(e);
+                            _experienceRepository.add(e);
                             break;
                         }
                         case 2: {
@@ -205,6 +222,7 @@ public class UserService implements GenericService<User> {
                                 System.out.println("Select which experience you want to delete: ");
                                 index = s.nextInt();
                                 try {
+                                    _experienceRepository.delete(user.getExperience().get(index - 1));
                                     user.getExperience().remove(index - 1);
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
@@ -224,6 +242,7 @@ public class UserService implements GenericService<User> {
                                 index = s.nextInt();
                                 try {
                                     _experienceService.update(user.getExperience().get(index - 1));
+                                    _experienceRepository.update(user.getExperience().get(index - 1));
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
                                 }
@@ -253,6 +272,7 @@ public class UserService implements GenericService<User> {
                             Certification e = _certificationService.read();
                             e.setUserId(user.getId());
                             user.getCertifications().add(e);
+                            _certificationRepository.add(e);
                             break;
                         }
                         case 2: {
@@ -263,6 +283,7 @@ public class UserService implements GenericService<User> {
                                 System.out.println("Select which certification you want to delete: ");
                                 index = s.nextInt();
                                 try {
+                                    _certificationRepository.delete(user.getCertifications().get(index - 1));
                                     user.getCertifications().remove(index - 1);
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
@@ -282,6 +303,7 @@ public class UserService implements GenericService<User> {
                                 index = s.nextInt();
                                 try {
                                     _certificationService.update(user.getCertifications().get(index - 1));
+                                    _certificationRepository.update(user.getCertifications().get(index - 1));
                                 } catch (IndexOutOfBoundsException exception) {
                                     System.out.println(exception.getMessage());
                                 }

@@ -37,7 +37,7 @@ public class ConsoleApp {
         _educationService = new EducationService();
         _experienceService = new ExperienceService();
         _certificationService = new CertificationService();
-        _userService = new UserService(_experienceService, _educationService, _certificationService);
+        _userService = new UserService(_experienceService, _educationService, _certificationService, _experienceRepository, _educationRepository, _certificationRepository);
         _postService = new PostService();
         this.feed = new TreeSet<>();
     }
@@ -47,6 +47,15 @@ public class ConsoleApp {
             instance = new ConsoleApp();
         }
         return instance;
+    }
+
+    void initUser(User u) {
+        ArrayList<Education> userEducation = _educationRepository.getAllForUser(u.getId());
+        ArrayList<Experience> userExperience = _experienceRepository.getAllForUser(u.getId());
+        ArrayList<Certification> userCertification = _certificationRepository.getAllForUser(u.getId());
+        u.setEducation(userEducation);
+        u.setExperience(userExperience);
+        u.setCertifications(userCertification);
     }
 
     public void start() {
@@ -116,6 +125,10 @@ public class ConsoleApp {
     }
 
     private void postAuthMenu() {
+        initUser(this.user);
+        ArrayList<Post> posts = _postRepository.getAll();
+        this.feed.addAll(posts);
+
         Scanner s = new Scanner(System.in);
 
         while(true) {
@@ -193,7 +206,12 @@ public class ConsoleApp {
                     break;
                 }
                 case 6: {
-                    feed.forEach(System.out::println);
+                    if(this.feed.isEmpty()) {
+                        System.out.println("Nothing new to see here");
+                    }
+                    else {
+                        feed.forEach(System.out::println);
+                    }
                     break;
                 }
                 default: {
